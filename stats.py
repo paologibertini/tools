@@ -24,10 +24,10 @@ def ops(name):
     return operations[name]
 
 data = []
+minsize, op = ops(args.op)
 
 for line in args.infile:
     fields = line.split(args.sep)
     data.append(int(fields[args.field].strip()))
-    minsize, op = ops(args.op)
-    if len(data) > minsize:
+    if len(data) >= minsize:
         print(op(data))
