@@ -13,17 +13,20 @@ args = parser.parse_args()
 def ops(name):
     operations = \
         {
-            "mean": statistics.mean,
-            "count": len,
-            "var": statistics.variance,
-            "stdev": statistics.stdev,
-            "median": statistics.median,
-            "gmean": statistics.geometric_mean
+            "mean": (1, statistics.mean),
+            "count": (1, len),
+            "var": (2, statistics.variance),
+            "stdev": (2, statistics.stdev),
+            "median": (1, statistics.median),
+            "gmean": (1, statistics.geometric_mean)
         }
+    return operations[name]
 
 data = []
 
 for line in args.infile:
     fields = line.split(args.sep)
     data.append(int(fields[args.field].strip()))
-    print(ops(args.op)(data))
+    minsize, op = ops(args.op)
+    if len(data) > minsize:
+        print(op(data))
