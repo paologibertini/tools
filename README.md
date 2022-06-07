@@ -1,1 +1,6 @@
-# Tools I made available to all
+# My tools
+Available:
+- **stats for files**
+  sum, mean, count, var, median, geometric mean, st dev real time
+- **log explainer**
+  add field description and rownum to log file
