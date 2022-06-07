@@ -40,7 +40,10 @@ tp = converter(args.type)
 
 for line in args.infile:
     fields = line.split(args.sep)
-    temp = fields[args.field].strip()
-    data.append(tp(temp))
-    if len(data) > minsize:
-        print(op(data))
+    try:
+        temp = tp(fields[args.field].strip())
+        data.append(temp)
+        if len(data) > minsize:
+            print(op(data))
+    except ValueError:
+        continue
