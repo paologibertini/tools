@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(description="Math to int file" )
 parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), help="Input file (default: stdin)", default=sys.stdin)
 parser.add_argument("-d", dest='sep', help="Fields separator (default: \"|\")", default="|")
 parser.add_argument("-f", dest='field', help="Field pos (default: 0)", default=0)
-parser.add_argument("-op", dest='op', help="Operation to apply (count, sum, mean, cmean, gmean, stdev, var, median)", default="mean")
+parser.add_argument("-op", dest='op', help="Operation to apply (count, sum, mean, cmean, gmean, stdev, var, median, max, min)", default="mean")
 parser.add_argument("-type", dest='type', help="Data type (int, float)", default="int")
 args = parser.parse_args()
 
@@ -23,6 +23,8 @@ def ops(name: str) -> object:
             "median": (1, statistics.median),
             "gmean": (1, statistics.geometric_mean),
             "sum": (1, sum),
+            "max": (1, max),
+            "min": (1, min),
         }
     return operations[name]
 
