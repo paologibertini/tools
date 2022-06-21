@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(description="Math to int file" )
 parser.add_argument('infile', nargs='?', type=argparse.FileType('r'), help="Input file (default: stdin)", default=sys.stdin)
 parser.add_argument("-d", dest='sep', help="Fields separator (default: \"|\")", default="|")
 parser.add_argument("-f", dest='field', help="Field pos (default: 0)", default=0)
-parser.add_argument("-op", dest='op', help="Operation to apply (count, sum, mean, cmean, gmean, stdev, var, median, max, min)", default="mean")
+parser.add_argument("-op", dest='op', help="Operation to apply (count, sum, mean, cmean, gmean, stdev, var, median, max, min, value, join)", default="mean")
 parser.add_argument("-type", dest='type', help="Data type (int, float)", default="int")
 args = parser.parse_args()
 
@@ -25,6 +25,8 @@ def ops(name: str) -> object:
             "sum": (1, sum),
             "max": (1, max),
             "min": (1, min),
+            "value": (1, current),
+            "join": (1, concat),
         }
     return operations[name]
 
@@ -34,6 +36,11 @@ def converter(t:str) -> Type[int | float]:
     else:
         return float
 
+def current(x):
+    return x
+
+def concat(x):
+    return "".join(list(map(str, x)))
 
 data = []
 minsize, op = ops(args.op)
@@ -43,7 +50,8 @@ tp = converter(args.type)
 for line in args.infile:
     fields = line.split(args.sep)
     try:
-        temp = tp(fields[args.field].strip())
+        val = fields[args.field].strip()
+        temp = tp(val) if args.op not in ("value", "join", "count") else val
         data.append(temp)
         if len(data) > minsize:
             print(op(data))
